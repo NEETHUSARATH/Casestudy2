@@ -17,19 +17,12 @@ app.use(express.static(path.join(__dirname+'/dist/FrontEnd')));
 
 // mongoDB connection 
 
-Mongoose.connect("mongodb+srv://NeeThuMongodb:<Mongo@16263646>@cluster0.rviognq.mongodb.net/EmployeeDB?retryWrites=true&w=majority",
+Mongoose.connect("mongodb+srv://NeeThuMongodb:16263646@cluster0.rviognq.mongodb.net/EmployeeDB?retryWrites=true&w=majority",
 { useNewUrlParser:true });
 
 // api with error handling and appropriate api mentioned in the TODO below
 
 
-
-
-
-
-
-
-//get data from db  using api '/api/employeelist'
 
 app.get('/api/employeelist', (req, res) => {
 
@@ -40,7 +33,7 @@ app.get('/api/employeelist', (req, res) => {
     console.log("Employees Details showed")
 });
 
-//get single data from db  using api '/api/employeelist/:id'
+
 
 app.get('/api/employeelist/:id', async (req, res) => {
     let id = req.params.id;
@@ -49,11 +42,6 @@ app.get('/api/employeelist/:id', async (req, res) => {
     });
 });
 
-
-
-
-//send data from db using api '/api/employeelist'
-//Request body format:{name:'',location:'',position:'',salary:''}
 
 app.post('/api/employeelist', async (req, res) => {
     let data = req.body;
@@ -70,9 +58,6 @@ app.post('/api/employeelist', async (req, res) => {
 });
 
 
-
-
-//TODO: delete a employee data from db by using api '/api/employeelist/:id'
 app.delete("/api/employeelist/:id", (req, res) => {
     let data = req.body;
     id = req.params.id;
@@ -87,10 +72,6 @@ app.delete("/api/employeelist/:id", (req, res) => {
 });
       
 
-
-
-//TODO: Update  a employee data from db by using api '/api/employeelist'
-//Request body format:{name:'',location:'',position:'',salary:''}
 app.put('/api/employeelist', (req, res) => {
 
     let data = {
