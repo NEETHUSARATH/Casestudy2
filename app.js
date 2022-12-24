@@ -1,26 +1,26 @@
 
-var express = require('express');
-var Bodyparser = require('body-parser');
-var Mongoose = require('mongoose');
-var cors = require('cors');
+var express = require("express");
+var Bodyparser = require("body-parser");
+var Mongoose = require("mongoose");
+var cors = require("cors");
 Mongoose.set('strictQuery', false);
 const EmployeeModel = require("./src/model/employee");
 
-var app=new express();
+var app = new express();
 app.use(Bodyparser.json());
-app.use(Bodyparser.urlencoded({extended:false}));
+app.use(Bodyparser.urlencoded({extended : false}));
 app.use(cors());
 
 
 const path=require('path');
 app.use(express.static(path.join(__dirname+'/dist/FrontEnd')));
 
-// Task2: create mongoDB connection 
+// mongoDB connection 
 
-Mongoose.connect("mongodb+srv://NeeThuMongodb:<Neethu@16263646>@cluster0.rviognq.mongodb.net/EmployeeDB?retryWrites=true&w=majority",
+Mongoose.connect("mongodb+srv://NeeThuMongodb:<Mongo@16263646>@cluster0.rviognq.mongodb.net/EmployeeDB?retryWrites=true&w=majority",
 { useNewUrlParser:true });
 
-//Task 2 : write api with error handling and appropriate api mentioned in the TODO below
+// api with error handling and appropriate api mentioned in the TODO below
 
 
 
@@ -29,7 +29,7 @@ Mongoose.connect("mongodb+srv://NeeThuMongodb:<Neethu@16263646>@cluster0.rviognq
 
 
 
-//TODO: get data from db  using api '/api/employeelist'
+//get data from db  using api '/api/employeelist'
 
 app.get('/api/employeelist', (req, res) => {
 
@@ -40,7 +40,7 @@ app.get('/api/employeelist', (req, res) => {
     console.log("Employees Details showed")
 });
 
-//TODO: get single data from db  using api '/api/employeelist/:id'
+//get single data from db  using api '/api/employeelist/:id'
 
 app.get('/api/employeelist/:id', async (req, res) => {
     let id = req.params.id;
@@ -52,7 +52,7 @@ app.get('/api/employeelist/:id', async (req, res) => {
 
 
 
-//TODO: send data from db using api '/api/employeelist'
+//send data from db using api '/api/employeelist'
 //Request body format:{name:'',location:'',position:'',salary:''}
 
 app.post('/api/employeelist', async (req, res) => {
@@ -66,7 +66,7 @@ app.post('/api/employeelist', async (req, res) => {
                 res.json({ "Status": "Success", "Data": data });
             }
         })
-    console.log("Employee details added successfully");
+    console.log("Employee details are added successfully");
 });
 
 
@@ -81,7 +81,7 @@ app.delete("/api/employeelist/:id", (req, res) => {
             res.json({ "Status": "Error", "Error": err })
         } else {
             res.json({ "Status": "deleted", "Data": data })
-            console.log("data successfully deleted");
+            console.log("Employee details are successfully deleted");
         }
     });
 });
@@ -108,7 +108,7 @@ app.put('/api/employeelist', (req, res) => {
             res.json({ "Status": "Updated", "Data": data });
         }
     });
-    console.log("Data successsfully updated");
+    console.log("Employee Details are successsfully updated");
 });
 
 

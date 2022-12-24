@@ -1,5 +1,5 @@
 const { default: mongoose} = require("mongoose");
-let Mongoose = require('mongoose');
+let Mongoose = require("mongoose");
 
 const employeeSchema = Mongoose.Schema(
     {
