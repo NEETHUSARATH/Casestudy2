@@ -1,6 +1,5 @@
-var Mongoose = require('mongoose');
-
-Mongoose.connect('mongodb://localhost:27017/ictakDB');
+const { default: mongoose} = require("mongoose");
+let Mongoose = require('mongoose');
 
 const employeeSchema = Mongoose.Schema(
     {
@@ -10,6 +9,7 @@ const employeeSchema = Mongoose.Schema(
         salary:Number
     }
 );
-var EmployeeModel = Mongoose.model("Employees",employeeSchema);
+
+let EmployeeModel = Mongoose.model("employees",employeeSchema);
 
 module.exports = {EmployeeModel};

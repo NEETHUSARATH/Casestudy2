@@ -1,15 +1,15 @@
 // Task1: initiate app and run server at 3000
 const express=require('express');
-const bodyparser=require('body-parser');
-const mongoose=require('mongoose');
+const Bodyparser=require('body-parser');
+const Mongoose=require('mongoose');
 const cors=require('cors');
-mongoose.set('strictQuery', false);
+Mongoose.set('strictQuery', false);
 
 const EmployeeModel = require("./src/model/employeeDB");
 const app=new express();
-app.use(bodyparser.json());
-app.use(bodyparser.urlencoded({extended:false}));
-
+app.use(Bodyparser.json());
+app.use(Bodyparser.urlencoded({extended:false}));
+app.use(cors());
 
 
 
