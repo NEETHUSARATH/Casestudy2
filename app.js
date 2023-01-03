@@ -1,97 +1,133 @@
-
-var express = require("express");
-var Bodyparser = require("body-parser");
-var Mongoose = require("mongoose");
-var cors = require("cors");
-Mongoose.set('strictQuery', false);
-const EmployeeModel = require("./src/model/employee");
-
-var app = new express();
-app.use(Bodyparser.json());
-app.use(Bodyparser.urlencoded({extended : false}));
-app.use(cors());
-
-
+const express=require('express');
+const Bodyparser=require('body-parser');
+const mongoose=require('mongoose');
+const cors=require('cors');
 const path=require('path');
+const { employeeModel } = require('./src/model/employee');
+var app=new express();
 app.use(express.static(path.join(__dirname+'/dist/FrontEnd')));
+app.use(Bodyparser.json());
+app.use(Bodyparser.urlencoded({extended:false}));
 
-// mongoDB connection 
-
-Mongoose.connect("mongodb+srv://NeeThuMongodb:16263646@cluster0.rviognq.mongodb.net/EmployeeDB?retryWrites=true&w=majority",
-{ useNewUrlParser:true });
-
-// api with error handling and appropriate api mentioned in the TODO below
-
-
-
-app.get('/api/employeelist', (req, res) => {
-
-    EmployeeModel.find((err, employee) => {
-
-        res.send(employee);
-    });
-    console.log("Employees Details showed")
+// Task2: create mongoDB connection 
+mongoose.connect('mongodb+srv://NeeThuMongodb:16263646@cluster0.rviognq.mongodb.net/employeeDB?retryWrites=true&w=majority',{
+    useNewUrlParser: true
 });
 
+//Task 2 : write api with error handling and appropriate api mentioned in the TODO below
 
 
-app.get('/api/employeelist/:id', async (req, res) => {
-    let id = req.params.id;
-    EmployeeModel.findOne({ _id: id }, (err, employee) => {
-        res.send(employee);
-    });
-});
-
-
-app.post('/api/employeelist', async (req, res) => {
-    let data = req.body;
-    let employee = new EmployeeModel(data);
-    await employee.save(
-        (err, data) => {
+app.post('/api/employeelist',(req,res)=>{
+    var data=req.body;
+    var employee=new employeeModel(data);
+    employee.save(
+        (err,data)=>{
             if (err) {
-                res.json({ "Status": "Error", "Error": err });
+                res.json({"status":"error","error":err})
             } else {
-                res.json({ "Status": "Success", "Data": data });
+              res.json({"status":"success","data":data})  
             }
-        })
-    console.log("Employee details are added successfully");
-});
-
-
-app.delete("/api/employeelist/:id", (req, res) => {
-    let data = req.body;
-    id = req.params.id;
-    EmployeeModel.findByIdAndDelete({ "_id": id }, data, (err, data) => {
-        if (err) {
-            res.json({ "Status": "Error", "Error": err })
-        } else {
-            res.json({ "Status": "deleted", "Data": data })
-            console.log("Employee details are successfully deleted");
         }
-    });
-});
-      
+    );
+})
 
-app.put('/api/employeelist', (req, res) => {
 
-    let data = {
-        name: req.body.name,
-        location: req.body.location,
-        position: req.body.position,
-        salary: req.body.salary
+
+
+//TODO: get data from db  using api '/api/employeelist'
+
+app.get('/api/employeelist',(req,res)=>{
+    employeeModel.find((err,data)=>{
+       if (err) {
+           res.json({"status":"error","error":err})
+       } else {
+           res.json(data);
+       }
+
+       }
+    )
+   })
+
+
+
+
+//TODO: get single data from db  using api '/api/employeelist/:id'
+
+app.get('/api/employeelist/:id',(req,res)=>{
+    var id=req.params.id;
+    employeeModel.findById({_id:id},function(err,data){
+        if (err) {
+            res.json(err);
+        } else {
+            res.json(data);
+        }
+    })
+});   
+    
+
+    
+
+
+
+
+
+//TODO: send data from db using api '/api/employeelist'
+//Request body format:{name:'',location:'',position:'',salary:''}
+
+app.post('/api/employeelist',(req,res)=>{
+    var data=req.body;
+    var employee=new employeeModel(data);
+    employee.save(
+        (err,data)=>{
+            if (err) {
+                res.json({"status":"error","error":err})
+            } else {
+              res.json({"status":"success","data":data})  
+            }
+        }
+    );
+})
+
+
+
+
+//TODO: delete a employee data from db by using api '/api/employeelist/:id'
+
+app.delete('/api/employeelist/:id',(req,res)=>{
+   
+    
+    var id=req.params.id;
+    employeeModel.deleteOne(
+        {_id:id},(err,data)=>{
+            if (err) {
+                res.json({"status":"error","error":err})
+            } else {
+                res.json({"status":"deleted","data":data})
+            }
+        }
+    )
+})
+
+
+
+//TODO: Update  a employee data from db by using api '/api/employeelist'
+//Request body format:{name:'',location:'',position:'',salary:''}
+app.put('/api/employeelist',(req,res)=>{
+           
+    var salary=req.body.salary;
+    var data=req.body;
+   employeeModel.findOneAndUpdate(
+    {"salary":salary},data,(err,data)=>{
+        if(err){
+            res.json({"status":"error","error":err})
+        }
+        else{
+            res.json({"status": "updated","data": data});
+        }
     }
-    let name = req.body.name;
-
-    EmployeeModel.findOneAndUpdate({ "name": name }, data, (err, data) => {
-        if (err) {
-            res.json({ "Status": "Error", "Error": err });
-        } else {
-            res.json({ "Status": "Updated", "Data": data });
-        }
-    });
-    console.log("Employee Details are successsfully updated");
-});
-
+        
+    )}
+   ) 
 
 //! dont delete this code. it connects the front end file.
 app.get('/*', function (req, res) {
@@ -99,6 +135,4 @@ app.get('/*', function (req, res) {
 });
 
 
-app.listen(3000, () => {
-    console.log("server started listening to port 3000");
-});
+app.listen(3000);
