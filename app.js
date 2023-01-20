@@ -11,7 +11,7 @@ app.use(Bodyparser.urlencoded({extended:false}));
 
 // Task2: create mongoDB connection 
 
-mongoose.connect('mongodb+srv://NeeThuMongodb:16263646@cluster0.rviognq.mongodb.net/employeeDB?retryWrites=true&w=majority',{
+mongoose.connect('mongodb+srv://NeeThuMongodb:16263646@cluster0.rviognq.mongodb.net/EmployeeDB?retryWrites=true&w=majority',{
     useNewUrlParser: true
 });
 
